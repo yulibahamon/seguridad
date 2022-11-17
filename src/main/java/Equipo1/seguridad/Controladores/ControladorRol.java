@@ -12,26 +12,22 @@ import java.security.NoSuchAlgorithmException;
 @RequestMapping("/roles")
 public class ControladorRol {
     @Autowired
-
     private RepositorioRol miRepositorioRol;
-
     @GetMapping("")
     public List<Rol> index() {
         return this.miRepositorioRol.findAll();
     }
-
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public Rol create(@RequestBody Rol infoRol) {
         return this.miRepositorioRol.save(infoRol);
     }
-
     @GetMapping("{id}")
     public Rol show(@PathVariable String id) {
-        Rol RolActual = this.miRepositorioRol
+        Rol rolActual = this.miRepositorioRol
                 .findById(id)
                 .orElse(null);
-        return RolActual;
+        return rolActual;
     }
 
     @PutMapping("{id}")
@@ -42,7 +38,6 @@ public class ControladorRol {
                 .orElse(null);
         if (RolActual != null) {
             RolActual.setNombre_rol(infoRol.getNombre_rol());
-            RolActual.setId_rol(convertirSHA256(infoRol.getId_rol()));
             return this.miRepositorioRol.save(RolActual);
         } else {
             return null;
@@ -58,21 +53,5 @@ public class ControladorRol {
         if (RolActual != null) {
             this.miRepositorioRol.delete(RolActual);
         }
-    }
-
-    public String convertirSHA256(String password) {
-        MessageDigest md = null;
-        try {
-            md = MessageDigest.getInstance("SHA-256");
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-            return null;
-        }
-        byte[] hash = md.digest(password.getBytes());
-        StringBuffer sb = new StringBuffer();
-        for (byte b : hash) {
-            sb.append(String.format("%02x", b));
-        }
-        return sb.toString();
     }
 }

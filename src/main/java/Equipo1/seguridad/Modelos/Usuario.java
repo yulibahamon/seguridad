@@ -20,7 +20,6 @@ public class Usuario {
         this.seudonimo = seudonimo;
         this.correo =correo;
         this.contrasena = contrasena;
-
     }
 
     public String getId() {return id;}
@@ -48,5 +47,13 @@ public class Usuario {
 
     public void setContrasena(String contrasena) {
         this.contrasena = contrasena;
+    }
+
+    public Rol getRol() {
+        return Rol;
+    }
+
+    public void setRol(Rol rol) {
+        Rol = rol;
     }
 }

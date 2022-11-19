@@ -46,8 +46,7 @@ public class ControladorUsuario {
             usuarioActual.setCedula(infoUsuario.getCedula());
             usuarioActual.setSeudonimo(infoUsuario.getSeudonimo());
             usuarioActual.setCorreo(infoUsuario.getCorreo());
-            usuarioActual.setContrasena(convertirSHA256(infoUsuario.getContrasena()))
-            ;
+            usuarioActual.setContrasena(convertirSHA256(infoUsuario.getContrasena()));
             return this.miRepositorioUsuario.save(usuarioActual);
         }else{
             return null;
@@ -96,10 +95,8 @@ public class ControladorUsuario {
         return sb.toString();
     }
     @PostMapping("/validar")
-    public Usuario validate(@RequestBody  Usuario infoUsuario,
-                            final HttpServletResponse response) throws IOException {
-        Usuario usuarioActual=this.miRepositorioUsuario
-                .getUserByEmail(infoUsuario.getCorreo());
+    public Usuario validate(@RequestBody  Usuario infoUsuario, final HttpServletResponse response) throws IOException {
+        Usuario usuarioActual=this.miRepositorioUsuario.getUserByEmail(infoUsuario.getCorreo());
         if (usuarioActual!=null &&
                 usuarioActual.getContrasena().equals(convertirSHA256(infoUsuario.getContrasena()))) {
             usuarioActual.setContrasena("");

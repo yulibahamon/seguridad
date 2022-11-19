@@ -12,63 +12,50 @@ import java.security.NoSuchAlgorithmException;
 @RequestMapping("/permisos")
 public class ControladorPermiso {
     @Autowired
-
     private RepositorioPermiso miRepositorioPermiso;
+
     @GetMapping("")
-    public List<Permiso> index(){
+    public List<Permiso> index() {
         return this.miRepositorioPermiso.findAll();
     }
+
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public Permiso create(@RequestBody Permiso infoPermiso){
+    public Permiso create(@RequestBody Permiso infoPermiso) {
         return this.miRepositorioPermiso.save(infoPermiso);
     }
+
     @GetMapping("{id}")
-    public Permiso show(@PathVariable String id){
-        Permiso PermisoActual=this.miRepositorioPermiso
+    public Permiso show(@PathVariable String id) {
+        Permiso PermisoActual = this.miRepositorioPermiso
                 .findById(id)
                 .orElse(null);
         return PermisoActual;
     }
+
     @PutMapping("{id}")
-    public Permiso update(@PathVariable String id,@RequestBody Permiso
-            infoPermiso){
-        Permiso PermisoActual=this.miRepositorioPermiso
+    public Permiso update(@PathVariable String id, @RequestBody Permiso
+            infoPermiso) {
+        Permiso PermisoActual = this.miRepositorioPermiso
                 .findById(id)
                 .orElse(null);
-        if (PermisoActual!=null){
+        if (PermisoActual != null) {
             PermisoActual.setUrl_permiso(infoPermiso.getUrl_permiso());
             PermisoActual.setMetodo(infoPermiso.getMetodo());
-            PermisoActual.setId_permiso(convertirSHA256(infoPermiso.getId_permiso()));
             return this.miRepositorioPermiso.save(PermisoActual);
-        }else{
+        } else {
             return null;
         }
     }
+
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("{id}")
-    public void delete(@PathVariable String id){
-        Permiso PermisoActual=this.miRepositorioPermiso
+    public void delete(@PathVariable String id) {
+        Permiso PermisoActual = this.miRepositorioPermiso
                 .findById(id)
                 .orElse(null);
-        if (PermisoActual!=null){
+        if (PermisoActual != null) {
             this.miRepositorioPermiso.delete(PermisoActual);
         }
-    }
-    public String convertirSHA256(String password) {
-        MessageDigest md = null;
-        try {
-            md = MessageDigest.getInstance("SHA-256");
-        }
-        catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-            return null;
-        }
-        byte[] hash = md.digest(password.getBytes());
-        StringBuffer sb = new StringBuffer();
-        for(byte b : hash) {
-            sb.append(String.format("%02x", b));
-        }
-        return sb.toString();
     }
 }
